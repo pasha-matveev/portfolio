@@ -21,6 +21,9 @@ const { title, description = 'Portfolio of Pavel Matveev — software and roboti
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    {import.meta.env.PROD && (
+      <script is:inline data-goatcounter="https://pavel-matveev.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+    )}
   </head>
   <body><slot /></body>
 </html>
