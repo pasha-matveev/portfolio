@@ -1,0 +1,11 @@
+---
+import Placeholder from './Placeholder.astro';
+interface Props { src?: string; poster?: string; caption: string }
+const { src, poster, caption } = Astro.props;
+---
+<figure class="fig fig-video">
+  {src
+    ? <video src={src} poster={poster} controls playsinline preload="metadata"></video>
+    : <Placeholder kind="Video" note={caption} ratio="16 / 9" compact />}
+  <figcaption>{caption}</figcaption>
+</figure>

@@ -1,0 +1,14 @@
+---
+import Logo from './Logo.astro';
+import { profile } from '../data/profile';
+interface Props { back?: boolean }
+const { back = false } = Astro.props;
+---
+<header class="top">
+  <a class="mark" href="/"><Logo class="logo" />{profile.name}</a>
+  <nav>
+    {back
+      ? <a class="btn ghost" href="/#work">← All projects</a>
+      : <><a href="#work">Projects</a><a href="#about">About</a><a class="btn" href="#contact">Contact</a></>}
+  </nav>
+</header>

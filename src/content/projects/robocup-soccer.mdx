@@ -1,0 +1,83 @@
+---
+title: RoboCup Soccer Robots
+tagline: Autonomous robots that localize with LiDAR, plan paths and play soccer.
+summary: Several generations of robots for RoboCup Junior Soccer. In 2025, as lead programmer, I helped the team to silver at the national final.
+order: 4
+period: Until 2025
+status: Finished
+role: Lead programmer (2025), team lead in earlier seasons
+kind: Software + Hardware
+context: Team Delta · Moscow Robotics Club
+stack: [C++, Python, OpenCV, Raspberry Pi 4, ATmega328 / PlatformIO, RPLidar, Fusion 360, KiCad]
+highlights:
+  - { value: 'Silver', label: 'RoboCup Russia Open 2025' }
+  - { value: '5,000/s', label: 'LiDAR samples' }
+  - { value: '3–5', label: 'people on the team' }
+cover: /projects/robocup-soccer/robot-photo.jpg
+coverPosition: center
+coverKind: Photo
+coverNote: "The robot: omnidirectional drive, ball dribbler, a mirror camera and the LiDAR on top"
+links:
+  - { label: 'Team Delta on YouTube (current team)', href: 'https://www.youtube.com/@deltarobocup' }
+---
+import Video from '../../components/Video.astro';
+import Figure from '../../components/Figure.astro';
+import Gallery from '../../components/Gallery.astro';
+
+## The game
+
+Two teams of small autonomous robots play soccer in the Open League: no remote control, everything is decided on board. A robot has to find the ball, know where it is on the field, avoid the opponents, and score, all in real time.
+
+## My part
+
+I spent years in the Moscow Robotics Club, building several versions of robots in the Lightweight and then Open Soccer categories. The team ranged from three to five people. In 2025 I was the lead programmer; before that I led the team, and at times I was also responsible for the PCB and 3D design.
+
+## In action
+
+<p class="note" style="margin-top:0">The photos, videos and specs on this page come from the team's current robot (2026), which is closely related to the 2025 one I worked on.</p>
+
+<Video src="/projects/robocup-soccer/goal.mp4" poster="/projects/robocup-soccer/goal-poster.jpg" caption="A goal from the goalkeeper: it tracks the opponent with its LiDAR, without seeing the ball, and kicks accurately across the whole field." />
+
+<Gallery>
+  <Video src="/projects/robocup-soccer/kick-tests.mp4" poster="/projects/robocup-soccer/kick-tests-poster.jpg" caption="Regular kick tests before a match." />
+  <Video src="/projects/robocup-soccer/trick-shot.mp4" poster="/projects/robocup-soccer/trick-shot-poster.jpg" caption="Test of a trick shot with a bounce off the wall." />
+</Gallery>
+
+<Gallery>
+  <Figure src="/projects/robocup-soccer/robots-pair.jpg" kind="Photo" caption="Two of the team's robots side by side, with a ball at the dribbler." />
+  <Figure src="/projects/robocup-soccer/robot-field.jpg" kind="Photo" caption="A robot on the field, with the conical mirror under the top plate and the dribbler at the front." />
+</Gallery>
+
+## What's inside the robot
+
+What follows combines my own work on localization and strategy with the team's current design.
+
+<Gallery>
+  <Figure src="/projects/robocup-soccer/exploded.jpg" kind="Photo" ratio="4 / 5" caption="Exploded view: LiDAR and mirror camera on top, electronics, kicker and power in the middle, drive at the bottom." />
+  <Figure src="/projects/robocup-soccer/optics.png" kind="Screenshot" caption="Optics design: ray diagram of the camera looking up into the conical mirror." />
+</Gallery>
+
+**Localization from a LiDAR in C++.** An RPLidar delivers 5,000 samples per second. I wrote a custom version of the Minimum Bounding Rectangle algorithm to find the field walls in the point cloud, which gives the robot's exact position; the clusters left inside the field are other robots. A gyroscope tells which side of the field the robot is facing.
+
+**Vision.** A camera with a 220° lens looks up into a custom mirror that was calculated, 3D-printed, sanded and chrome-plated, so the whole field fits into one frame. It runs at 50 fps on the Raspberry Pi with no neural networks: a colour threshold finds the ball, a minimum enclosing circle fits it, and an `atan2` gives its angle and distance.
+
+**Path planning.** I wrote a simulator that tests strategy without the robot, and implemented Artificial Potential Fields for obstacle avoidance, plus Dubins paths so the striker reaches the ball already facing the goal. A spin shot turns the robot 115° through the dribbler and curves the ball behind the keeper.
+
+<Gallery>
+  <Figure src="/projects/robocup-soccer/dubins.png" kind="Screenshot" caption="Dubins path: the striker reaches the ball already facing the goal." />
+  <Figure src="/projects/robocup-soccer/spin-shot.png" kind="Screenshot" caption="Spin shot: a fast turn through the dribbler curves the ball behind the keeper." />
+</Gallery>
+
+**Drive.** Three omnidirectional wheels at 120° let the robot move in any direction while turning, at up to 2 m/s. Brushless motors with 16-bit encoders talk over CAN, and an MPU-6050 gyroscope holds the heading.
+
+**Dribbler and kicker.** The dribbler rollers are cast in our own 3D-printed moulds and sit on a floating mount with two degrees of freedom; a light gate tells whether the robot has the ball. The kicker is a solenoid charged to 48 V, and the pulse length sets the power from a soft pass to a full shot at up to 5 m/s.
+
+**Electronics.** A Raspberry Pi 4 runs vision, positioning and strategy, while an ATmega328 handles the drive, dribbler and kicker over UART. The whole robot runs on four 18650 cells.
+
+<Video src="/projects/robocup-soccer/dribbler-test.mp4" poster="/projects/robocup-soccer/dribbler-test-poster.jpg" caption="Test of the dribbler." />
+
+## Results
+
+- **RoboCup Russia Open 2025** — silver medal, Soccer Open League (national final)
+
+<Figure src="/projects/robocup-soccer/awards.jpg" kind="Photo" caption="The awards ceremony at RoboCup Russia Open 2025." />

@@ -1,0 +1,15 @@
+---
+// Stands in for a real picture/video until media is supplied.
+interface Props { kind?: 'Photo' | 'Screenshot' | 'Video'; note: string; ratio?: string; compact?: boolean }
+const { kind = 'Photo', note, ratio = '16 / 10', compact = false } = Astro.props;
+const icon: Record<string, string> = {
+  Photo: 'M4 7h3l1.5-2h7L17 7h3v12H4zM12 17a4 4 0 100-8 4 4 0 000 8z',
+  Screenshot: 'M3 5h18v14H3zM3 9h18',
+  Video: 'M4 6h12v12H4zM16 10l5-3v10l-5-3',
+};
+---
+<div class:list={['ph', { 'ph-compact': compact }]} style={`aspect-ratio:${ratio}`} role="img" aria-label={`${kind} placeholder: ${note}`}>
+  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d={icon[kind]} /></svg>
+  <span class="ph-kind">{kind} placeholder</span>
+  {!compact && <span class="ph-note">{note}</span>}
+</div>

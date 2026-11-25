@@ -1,0 +1,10 @@
+---
+import Placeholder from './Placeholder.astro';
+import type { Project } from '../lib/projects';
+interface Props { project: Project; ratio?: string }
+const { project, ratio = '16 / 10' } = Astro.props;
+const d = project.data;
+---
+{d.cover
+  ? <img class="cover-img" src={d.cover} alt={`${d.title} — ${d.coverNote}`} style={`aspect-ratio:${ratio};object-position:${d.coverPosition}`} loading="lazy" />
+  : <Placeholder kind={d.coverKind} note={d.coverNote} ratio={ratio} />}

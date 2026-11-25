@@ -1,0 +1,48 @@
+---
+title: WavIOT Analytics
+tagline: Turning 50,000 support conversations into a map of what breaks in the field.
+summary: A local-LLM pipeline and web platform that reads support conversations for smart water and electricity meters and shows which devices and problems come up most.
+order: 1
+period: Jun 2026 – now
+status: In testing
+role: Software engineer (remote, part-time)
+kind: Software
+context: WavIOT · Kazakhstan, remote
+stack: [Python, FastAPI, SQLite, Ollama, Qwen3:14b, Embeddings, React, TypeScript, Docker]
+highlights:
+  - { value: '50,000', label: 'support cases processed' }
+  - { value: '0.908', label: 'classifier accuracy' }
+  - { value: '0.869', label: 'macro-F1' }
+  - { value: '42M', label: 'production events linked' }
+cover: /projects/waviot-analytics/overview.png
+coverKind: Screenshot
+coverNote: "Overview dashboard: most problematic devices and most frequent problems"
+---
+import Figure from '../../components/Figure.astro';
+import Gallery from '../../components/Gallery.astro';
+
+## The problem
+
+WavIOT makes smart meters for water and electricity. Customers and companies contact support all the time, and the answers to "which devices fail, how, and what fixes it?" were buried in tens of thousands of chats. I was handed an outline of the task and designed the solution myself.
+
+## What I built
+
+**A staged pipeline.** Cheap filters run first; the expensive language model only sees what survives. Every extracted fact keeps its evidence, the model version and the prompt version, so any number in the UI can be traced back to the original conversation.
+
+**A lightweight problem detector.** A local LLM (Qwen3:14b through Ollama) annotated 5,000 cases. I used them to train a logistic-regression classifier on conversation embeddings. It reaches 0.908 accuracy and 0.869 macro-F1 and screens the full archive fast; the LLM then does deeper analysis only on selected cases: which device, what problem, what support did about it.
+
+**A link to production data.** Conversations are matched to the device registry and an event log of about 42 million records, so a problem can be followed from the customer's complaint to the repair history.
+
+**A web platform** for the team: top problem devices, a device-tree catalogue, problem and solution pages, fuzzy search, and a data assistant that answers questions through read-only tools. Users, roles and sessions are built in.
+
+<Gallery>
+  <Figure src="/projects/waviot-analytics/catalog.png" kind="Screenshot" caption="Device catalogue: mentions over time for every model in the tree." />
+  <Figure src="/projects/waviot-analytics/problem.png" kind="Screenshot" caption="A problem: trend, affected devices and what support did." />
+  <Figure src="/projects/waviot-analytics/chat.png" kind="Screenshot" caption="A conversation and what the model extracted from it." />
+</Gallery>
+
+<p class="note">Screenshots use synthetic demo data — no real customers or conversations. The interface is in Russian; labels are translated to English here.</p>
+
+## Where it stands
+
+The data analytics team already uses the code, and the clusters of problems were reviewed with WavIOT engineers. The platform is in testing before it joins the everyday workflow. I'm now working on detection accuracy. Everything runs locally; no support data leaves the company's machines.

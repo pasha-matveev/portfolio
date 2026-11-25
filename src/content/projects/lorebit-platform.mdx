@@ -1,0 +1,62 @@
+---
+title: L'Orebit Platform
+tagline: The student platform of École Polytechnique's bachelor — accounts, a virtual currency, CVs and forms.
+summary: Verified student accounts, a wallet with safe coin transfers, QR-linked profiles and quick forms, built and run by me as the organization's IT & Tech representative.
+order: 2
+period: 2025 – now
+status: Ongoing
+role: Sole developer, IT & Tech representative
+kind: Software
+context: L'Orebit · student organization
+stack: [React, TypeScript, Vite, Django, DRF, PostgreSQL, Valkey, Docker Compose, Caddy, GitHub Actions]
+highlights:
+  - { value: '182', label: 'verified accounts' }
+  - { value: '375', label: 'completed coin transactions' }
+  - { value: '~500', label: 'students in the bachelor' }
+  - { value: '1', label: 'developer' }
+links: []
+cover: /projects/lorebit-platform/wallet.png
+coverKind: Screenshot
+coverNote: "Personal space with the wallet: balance, send, QR and recent activity (mock data)"
+---
+
+## What it is
+
+I'm one of eleven students elected to L'Orebit, the student organization of the bachelor at École Polytechnique, and I'm responsible for everything technical. The platform is the home for student life: public information for everyone and a personal space for each student.
+
+## What it does
+
+- **Verified accounts** with school-email verification and revocable, persistent sessions.
+- **A wallet** with student-to-student coin transfers and administrative issuance.
+- **QR-linked profiles** that can be revoked.
+- **A CV drop-off system** that connects students with partner companies (below).
+- **Forms** that can be created quickly when the organization needs information from students.
+
+import Figure from '../../components/Figure.astro';
+import Gallery from '../../components/Gallery.astro';
+
+## CV drop-off for partner companies
+
+Students pick their year and major and drop off a one-page PDF, up to 5 MB. Every file is scanned for malware and cleaned of active content before it is accepted, and a replacement never overwrites a good CV unless it passes too. Approved CVs are merged into a single CV book that rebuilds automatically every ten minutes. Nine partner companies open it through a private access link that admins can create and revoke; there is nothing to apply to individually. Admins open and close the drop-off window, write the announcement, manage partners and hide individual CVs from the book.
+
+<Gallery>
+  <Figure src="/projects/lorebit-platform/cv-dropoff.png" kind="Screenshot" caption="Student view: year and major, the submitted CV, and replacing it." />
+  <Figure src="/projects/lorebit-platform/partners.png" kind="Screenshot" caption="The partner list on lorebit.fr: trading firms, a bank and an industrial group, each with a logo and description." />
+  <Figure src="/projects/lorebit-platform/admin.png" kind="Screenshot" caption="Admin view: the drop-off window, announcement and the generated CV book." />
+</Gallery>
+
+<p class="note">The student and admin screens come from a local build with mock data (fictional students). The partner list is the real one from lorebit.fr.</p>
+
+## A hard part: money that can't be double-spent
+
+Two simultaneous requests must never spend the same coins twice. Transfers run in atomic database transactions with row locking and idempotency keys, a ledger can be reconciled at any time, and concurrency tests try to break it on every change.
+
+## How it's built
+
+React, TypeScript and Vite on the front. Django and Django REST Framework on the back, PostgreSQL for data and Valkey for rate limiting and short-lived shared state. It ships as Docker Compose behind Caddy with automatic HTTPS; GitHub Actions runs backend, frontend, browser and accessibility tests, and releases go out through a separate deployment script.
+
+Beyond the transfer logic, the security work is concrete: backend permission checks on every action, authentication rate limits, CSRF protection, health monitoring and encrypted database backups.
+
+## What's next
+
+The platform is growing with the year's events — more features are planned, and I'll keep updating this page as they land.

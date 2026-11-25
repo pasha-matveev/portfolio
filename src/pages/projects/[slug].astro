@@ -1,0 +1,43 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Cover from '../../components/Cover.astro';
+import { getProjects } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((p, i) => ({ params: { slug: p.id }, props: { project: p, next: projects[(i + 1) % projects.length] } }));
+}
+const { project, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+---
+<Base title={`${d.title} — Pavel Matveev`} description={d.summary}>
+  <div class="wrap">
+    <Header back />
+    <article>
+      <div class="p-head">
+        <div class="tags"><span>{d.kind}</span><span>{d.period}</span><span class="st">{d.status}</span></div>
+        <h1>{d.title}</h1>
+        <p>{d.tagline}</p>
+      </div>
+
+      <div class="p-cover"><Cover project={project} ratio="16 / 10" /></div>
+
+      <ul class="tiles">{d.highlights.map((h) => <li><b>{h.value}</b><span>{h.label}</span></li>)}</ul>
+
+      <div class="p-grid">
+        <div class="prose"><Content /></div>
+        <aside class="panel">
+          <h3>Role</h3><p>{d.role}</p>
+          <h3>Context</h3><p>{d.context}</p>
+          <h3>Stack</h3><div class="stack">{d.stack.map((s) => <span>{s}</span>)}</div>
+          {d.links.length > 0 && <><h3>Links</h3><p>{d.links.map((l) => <a href={l.href}>{l.label}</a>)}</p></>}
+        </aside>
+      </div>
+
+      <a class="next" href={`/projects/${next.id}/`}><span>Next project</span><b>{next.data.title} →</b></a>
+    </article>
+  </div>
+</Base>

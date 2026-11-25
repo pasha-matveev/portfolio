@@ -1,0 +1,9 @@
+---
+import Placeholder from './Placeholder.astro';
+interface Props { src?: string; kind?: 'Photo' | 'Screenshot' | 'Video'; caption: string; ratio?: string }
+const { src, kind = 'Photo', caption, ratio } = Astro.props;
+---
+<figure class="fig">
+  {src ? <img src={src} alt={caption} loading="lazy" style={ratio ? `aspect-ratio:${ratio};object-fit:contain;background:#fff` : undefined} /> : <Placeholder kind={kind} note={caption} ratio={ratio} compact />}
+  <figcaption>{caption}</figcaption>
+</figure>

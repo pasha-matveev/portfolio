@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Cover from '../components/Cover.astro';
+import { getProjects } from '../lib/projects';
+import { profile } from '../data/profile';
+const projects = await getProjects();
+---
+<Base title={`${profile.name} — Portfolio`}>
+  <div class="wrap">
+    <Header />
+
+    <section class="hero">
+      <div class="hero-text">
+        <p class="pill">École Polytechnique · Math & CS</p>
+        <h1>I build software <span>and robots.</span></h1>
+        <p class="intro">{profile.intro}</p>
+        <div class="chips">{['Local LLMs', 'Web platforms', 'Robotics', 'Embedded', 'Computer vision'].map((c) => <span>{c}</span>)}</div>
+      </div>
+      <div class="photo-card portrait-card">
+        <img class="portrait" src="/photos/portrait.jpg" width="1000" height="1499" alt="Portrait of Pavel Matveev" fetchpriority="high" />
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="section-head"><h2>Selected Projects</h2><span>{String(projects.length).padStart(2, '0')}</span></div>
+      <div class="grid">
+      {projects.map((p, i) => (
+        <a class:list={['card', { wide: i === 0 }]} href={`/projects/${p.id}/`}>
+          <div class="media"><Cover project={p} ratio={i === 0 ? '16 / 9' : '16 / 10'} /></div>
+          <div class="body">
+            <div class="tags"><span>{p.data.kind}</span><span>{p.data.period}</span><span class="st">{p.data.status}</span></div>
+            <h2>{p.data.title}</h2>
+            <p>{p.data.summary}</p>
+            <div class="stack">{p.data.stack.slice(0, 5).map((s) => <span>{s}</span>)}</div>
+            <span class="more">View project <i>→</i></span>
+          </div>
+        </a>
+      ))}
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="photo-card about-card">
+        <img class="about-photo" src="/photos/laptop.jpg" width="1600" height="1067" alt="Pavel Matveev holding a laptop" loading="lazy" />
+      </div>
+      <div class="panel">
+        <h2>About</h2>
+        <ul>{profile.facts.map((f) => (
+          <li><b>{f.k}</b>{Array.isArray(f.v) ? f.v.map((line) => <span class="fact-line">{line}</span>) : f.v}</li>
+        ))}</ul>
+      </div>
+      <div class="panel">
+        <h2>Skills</h2>
+        <ul>{profile.skills.map((f) => <li><b>{f.k}</b>{f.v}</li>)}</ul>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Get in touch</h2>
+      <p>Internships, collaborations, or a question about one of the projects — email works best.</p>
+      <div class="actions">
+        <a class="btn" href={profile.links[1].href}>{profile.email}</a>
+        <a class="btn ghost" href={profile.links[0].href}>LinkedIn ↗</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© {new Date().getFullYear()} {profile.name}</p>
+      <p>{profile.location}</p>
+    </footer>
+  </div>
+</Base>

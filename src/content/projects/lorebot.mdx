@@ -1,0 +1,51 @@
+---
+title: Lorebot
+tagline: A Telegram mini app with its own currency that ran crêpe delivery for a whole campaign week.
+summary: Orders, a virtual wallet and campus-only access, inside Telegram. 308 students ordered during the week.
+order: 3
+period: May 2026
+status: Finished
+role: Sole developer
+kind: Software
+context: L'Orebit · Campaign Week
+stack: [Python, FastAPI, python-telegram-bot, SQLModel, SQLite, React, TypeScript, Zustand, Hetzner]
+highlights:
+  - { value: '308', label: 'students ordered in 6 days' }
+  - { value: '1,603', label: 'orders placed' }
+  - { value: '409', label: 'registered accounts' }
+cover: /projects/lorebot/screens.jpg
+coverPosition: center
+coverKind: Screenshot
+coverNote: "Telegram mini app: home, order tracking and balance screens"
+---
+
+## What it was
+
+Campaign Week is when the lists of candidates compete for the next year's student organization. Ours needed a way to sell crêpes and deliver them across campus, fast. So I built Lorebot: a Telegram bot and mini app where every student had an Orbit ID and a wallet in a virtual currency, could send coins to friends, order crêpes to an address and follow the order live, and where administrators handled and delivered them.
+
+Between May 5 and 10, 308 distinct students placed 1,603 orders, 1,411 of which were delivered. The virtual currency was never real money.
+
+import Figure from '../../components/Figure.astro';
+import Gallery from '../../components/Gallery.astro';
+
+<Gallery>
+  <Figure src="/projects/lorebot/delivery.jpg" kind="Photo" caption="Campaign Week: delivering a crêpe on campus." />
+</Gallery>
+
+<p class="note">The app screens on this page come from a local build with fictional students and demo accounts: home with the balance and Orbit ID, live order tracking, the transaction log, and the admin console.</p>
+
+## Running the deliveries
+
+Administrators had their own console inside the same mini app. New orders arrived as a list to confirm or reject, and confirmed orders were grouped by delivery address, so several crêpes for the same place could be delivered together and marked as delivered one by one. The student saw each status change live in their own order tracking.
+
+<Figure src="/projects/lorebot/admin.jpg" kind="Screenshot" caption="The admin console: order categories, new orders to confirm, and confirmed orders grouped by address." />
+
+## One-tap, campus-only registration
+
+The access problem: only people on campus should get in, but email confirmation is slow and nobody finishes it during a busy week. I imported the Telegram IDs of the official promotion chats before launch, so a student could open their personal space straight from Telegram with no sign-up form at all.
+
+## Under the hood
+
+A FastAPI backend with Telegram bot polling in the same service, SQLModel on SQLite for users, balances, orders, transactions, inventory and game state, and a React + TypeScript mini app with an admin interface, hosted on Hetzner.
+
+Lorebot has since been replaced by the full L'Orebit platform.
